@@ -1,12 +1,14 @@
-package com.projects.melih.baking;
+package com.projects.melih.baking.ui;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.projects.melih.baking.R;
+import com.projects.melih.baking.ui.base.BaseActivity;
 
 /**
  * Created by Melih Gültekin on 22.04.2018
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
