@@ -10,6 +10,11 @@ import java.lang.annotation.Target;
 
 import dagger.MapKey;
 
+/**
+ * Created by Melih Gültekin on 05.05.2018
+ *
+ * @see <a href="https://github.com/googlesamples/android-architecture-components/blob/master/GithubBrowserSample/app/src/main/java/com/android/example/github/di/ViewModelKey.kt">ViewModelKey</a>
+ */
 @Documented
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
