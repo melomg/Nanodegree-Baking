@@ -57,3 +57,5 @@ gradlew
 
 *.jar
 /gradle.properties
+*.sketch
+*.json
