@@ -20,6 +20,7 @@ public class DataBindingUtils {
 
     @BindingAdapter("imageUrl")
     public static void setImageUrl(ImageView imageView, String url) {
+        //TODO change taking image from video behaviour
         Context context = imageView.getContext();
         RequestOptions options = new RequestOptions()
                 .centerCrop()
