@@ -2,14 +2,15 @@ package com.projects.melih.baking.ui.base;
 
 import android.content.Context;
 import android.support.annotation.StringRes;
-import android.support.v4.app.Fragment;
 import android.widget.Toast;
+
+import dagger.android.support.DaggerFragment;
 
 /**
  * Created by Melih Gültekin on 22.04.2018
  */
 
-public class BaseFragment extends Fragment {
+public class BaseFragment extends DaggerFragment {
 
     protected Context context;
     protected NavigationListener navigationListener;
@@ -27,5 +28,11 @@ public class BaseFragment extends Fragment {
 
     protected void showToast(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        navigationListener = null;
     }
 }

@@ -1,7 +1,7 @@
 package com.projects.melih.baking.di;
 
 import com.projects.melih.baking.ui.main.MainActivity;
-import com.projects.melih.baking.ui.main.MainActivityModule;
+import com.projects.melih.baking.ui.main.MainActivityFragmentBuildersModule;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -13,6 +13,6 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class ActivityBuilder {
 
     @ScopeActivity
-    @ContributesAndroidInjector(modules = {MainActivityModule.class})
+    @ContributesAndroidInjector(modules = {MainActivityFragmentBuildersModule.class})
     abstract MainActivity bindMainActivity();
 }

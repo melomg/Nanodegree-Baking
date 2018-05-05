@@ -1,6 +1,8 @@
 package com.projects.melih.baking.model;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.util.DiffUtil;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -85,4 +87,16 @@ public class Recipe {
     public void setImage(@Nullable String image) {
         this.image = image;
     }
+
+    public static final DiffUtil.ItemCallback<Recipe> DIFF_CALLBACK = new DiffUtil.ItemCallback<Recipe>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Recipe oldRecipe, @NonNull Recipe newRecipe) {
+            return oldRecipe.getId() == newRecipe.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Recipe oldRecipe, @NonNull Recipe newRecipe) {
+            return oldRecipe.equals(newRecipe);
+        }
+    };
 }

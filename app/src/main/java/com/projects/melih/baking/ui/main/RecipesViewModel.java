@@ -1,10 +1,13 @@
 package com.projects.melih.baking.ui.main;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
+import com.projects.melih.baking.common.SingleLiveEvent;
 import com.projects.melih.baking.model.Recipe;
+import com.projects.melih.baking.repository.remote.ErrorState;
 import com.projects.melih.baking.repository.remote.RecipeRepository;
 
 import java.util.List;
@@ -17,37 +20,51 @@ import retrofit2.Call;
  * Created by Melih Gültekin on 05.05.2018
  */
 public class RecipesViewModel extends ViewModel {
+    private final SingleLiveEvent<ErrorState> errorLiveData;
     private final MutableLiveData<Boolean> loadingLiveData;
-    private final MutableLiveData<Boolean> errorLiveData;
-    private final MutableLiveData<List<Recipe>> recipesLiveData;
+    private final MutableLiveData<Boolean> triggerListData;
+    private final MediatorLiveData<List<Recipe>> recipesLiveData;
+    private final RecipeRepository recipeRepository;
     private Call<List<Recipe>> callRecipes;
 
+    @SuppressWarnings("WeakerAccess")
     @Inject
     public RecipesViewModel(RecipeRepository recipeRepository) {
+        this.recipeRepository = recipeRepository;
+        errorLiveData = new SingleLiveEvent<>();
         loadingLiveData = new MutableLiveData<>();
-        errorLiveData = new MutableLiveData<>();
-        recipesLiveData = new MutableLiveData<>();
+        triggerListData = new MutableLiveData<>();
+        recipesLiveData = new MediatorLiveData<>();
+        recipesLiveData.addSource(triggerListData, state -> getRecipeList());
+        getRecipeList();
+    }
+
+    private void getRecipeList() {
         loadingLiveData.setValue(true);
-        callRecipes = recipeRepository.loadRecipes(data -> {
+        callRecipes = recipeRepository.loadRecipes((data, errorState) -> {
             loadingLiveData.setValue(false);
             if (data == null) {
-                errorLiveData.setValue(true);
+                errorLiveData.setValue(errorState);
             } else {
                 recipesLiveData.setValue(data);
             }
         });
     }
 
+    public LiveData<ErrorState> getErrorLiveData() {
+        return errorLiveData;
+    }
+
     public LiveData<Boolean> getLoadingLiveData() {
         return loadingLiveData;
     }
 
-    public LiveData<Boolean> getErrorLiveData() {
-        return errorLiveData;
-    }
-
     public LiveData<List<Recipe>> getRecipesLiveData() {
         return recipesLiveData;
+    }
+
+    public void fetchData() {
+        triggerListData.setValue(true);
     }
 
     @Override
