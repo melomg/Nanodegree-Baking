@@ -1,16 +1,18 @@
 package com.projects.melih.baking;
 
-import android.app.Application;
 import android.os.StrictMode;
 
+import com.projects.melih.baking.di.DaggerSingletonComponent;
 import com.squareup.leakcanary.LeakCanary;
 
+import dagger.android.AndroidInjector;
+import dagger.android.support.DaggerApplication;
 import timber.log.Timber;
 
 /**
  * Created by Melih Gültekin on 22.04.2018
  */
-public class BakingApplication extends Application {
+public class BakingApplication extends DaggerApplication {
 
     @Override
     public void onCreate() {
@@ -35,5 +37,10 @@ public class BakingApplication extends Application {
         LeakCanary.install(this);
 
         Timber.plant(new Timber.DebugTree());
+    }
+
+    @Override
+    protected AndroidInjector<? extends BakingApplication> applicationInjector() {
+        return DaggerSingletonComponent.builder().create(this);
     }
 }

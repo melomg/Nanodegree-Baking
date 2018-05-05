@@ -21,9 +21,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            debuggable true
+        }
         release {
+            debuggable false
             zipAlignEnabled true
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -50,6 +54,7 @@ android {
 ext {
     supportLibrary = "27.1.1"
     aac = "1.1.1"
+    dagger = "2.15"
     retrofit = "2.3.0"
     glide = "4.6.1"
     leakcanary = "1.5.4"
@@ -68,6 +73,14 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:${aac}"
     implementation "android.arch.lifecycle:runtime:${aac}"
     annotationProcessor "android.arch.lifecycle:compiler:${aac}"
+
+    // Dagger
+    implementation "com.google.dagger:dagger:${dagger}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${dagger}"
+
+    // Dagger.Android
+    implementation "com.google.dagger:dagger-android-support:${dagger}"
+    annotationProcessor "com.google.dagger:dagger-android-processor:${dagger}"
 
     // Network
     implementation "com.squareup.retrofit2:converter-gson:${retrofit}"
