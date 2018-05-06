@@ -32,7 +32,7 @@
                 android:layout_height="0dp"
                 android:contentDescription="@null"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{recipe.steps[0].videoUrl}"
+                app:imageUrl="@{recipe.image}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="3:2"
                 app:layout_constraintEnd_toEndOf="parent"
