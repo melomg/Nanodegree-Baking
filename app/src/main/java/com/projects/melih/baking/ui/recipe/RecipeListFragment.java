@@ -1,4 +1,4 @@
-package com.projects.melih.baking.ui.recipes;
+package com.projects.melih.baking.ui.recipe;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -17,6 +17,8 @@ import com.projects.melih.baking.databinding.FragmentRecipeListBinding;
 import com.projects.melih.baking.ui.base.BaseFragment;
 import com.projects.melih.baking.ui.main.RecipesViewModel;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 /**
@@ -26,8 +28,8 @@ public class RecipeListFragment extends BaseFragment {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private FragmentRecipeListBinding binding;
-    private RecipeListAdapter adapter;
     private RecipesViewModel recipesViewModel;
+    private RecipeListAdapter adapter;
 
     public static RecipeListFragment newInstance() {
         return new RecipeListFragment();
@@ -37,7 +39,7 @@ public class RecipeListFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_recipe_list, container, false);
-        recipesViewModel = ViewModelProviders.of(this, viewModelFactory).get(RecipesViewModel.class);
+        recipesViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(RecipesViewModel.class);
         recipesViewModel.getLoadingLiveData().observe(this, isLoading -> {
             if ((isLoading != null) && isLoading) {
                 binding.swipeRefresh.setRefreshing(true);
@@ -58,8 +60,8 @@ public class RecipeListFragment extends BaseFragment {
         binding.swipeRefresh.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
 
         adapter = new RecipeListAdapter(recipe -> {
-            //TODO
-            //navigationListener.replaceFragment(RecipeDetailFragment.newInstance(recipe));
+            recipesViewModel.setSelectedRecipe(recipe);
+            navigationListener.replaceFragment(RecipeDetailFragment.newInstance());
         });
 
         GridAutoFitLayoutManager layoutManager = new GridAutoFitLayoutManager(context, R.dimen.list_item_width);

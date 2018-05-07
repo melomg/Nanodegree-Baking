@@ -6,53 +6,53 @@
     <data>
 
         <variable
-            name="recipe"
-            type="com.projects.melih.baking.model.Recipe"/>
+            name="step"
+            type="com.projects.melih.baking.model.Step"/>
 
     </data>
 
     <android.support.v7.widget.CardView
-        android:layout_width="@dimen/list_item_width"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/x_min_size"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:focusable="true"
-        app:cardBackgroundColor="@color/gray_light"
-        app:cardCornerRadius="@dimen/x_min_size"
-        app:cardElevation="@dimen/x_min_size">
+        app:cardBackgroundColor="@color/gray"
+        app:cardCornerRadius="@dimen/xx_min_size"
+        app:cardElevation="@dimen/xx_min_size">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/recipe_image"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:contentDescription="@null"
-                android:scaleType="centerCrop"
-                app:imageUrl="@{recipe.image}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="3:2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_recipe_placeholder"/>
-
             <TextView
-                android:id="@+id/recipe_name"
-                android:layout_width="wrap_content"
+                android:id="@+id/step_description"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@color/transparent_gray"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:padding="@dimen/large_size"
                 android:textColor="@color/black"
-                android:text="@{recipe.name}"
+                android:text="@{step.shortDescription}"
+                android:maxLines="2"
+                android:ellipsize="end"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/icon_play_step"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:text="Nutella Pie"/>
+                tools:text="Starting prep"/>
+
+            <ImageView
+                android:id="@+id/icon_play_step"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:contentDescription="@null"
+                android:layout_marginEnd="@dimen/large_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_play"/>
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 </layout>

@@ -4,9 +4,11 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.support.annotation.NonNull;
 
 import com.projects.melih.baking.common.SingleLiveEvent;
 import com.projects.melih.baking.model.Recipe;
+import com.projects.melih.baking.model.Step;
 import com.projects.melih.baking.repository.remote.ErrorState;
 import com.projects.melih.baking.repository.remote.RecipeRepository;
 
@@ -24,6 +26,8 @@ public class RecipesViewModel extends ViewModel {
     private final MutableLiveData<Boolean> loadingLiveData;
     private final MutableLiveData<Boolean> triggerListData;
     private final MediatorLiveData<List<Recipe>> recipesLiveData;
+    private final MutableLiveData<Recipe> selectedRecipeLiveData;
+    private final MutableLiveData<Step> selectedStepLiveData;
     private final RecipeRepository recipeRepository;
     private Call<List<Recipe>> callRecipes;
 
@@ -36,6 +40,8 @@ public class RecipesViewModel extends ViewModel {
         triggerListData = new MutableLiveData<>();
         recipesLiveData = new MediatorLiveData<>();
         recipesLiveData.addSource(triggerListData, state -> getRecipeList());
+        selectedRecipeLiveData = new MutableLiveData<>();
+        selectedStepLiveData = new MutableLiveData<>();
         getRecipeList();
     }
 
@@ -61,6 +67,22 @@ public class RecipesViewModel extends ViewModel {
 
     public LiveData<List<Recipe>> getRecipesLiveData() {
         return recipesLiveData;
+    }
+
+    public LiveData<Recipe> getSelectedRecipeLiveData() {
+        return selectedRecipeLiveData;
+    }
+
+    public void setSelectedRecipe(@NonNull Recipe selectedRecipe) {
+        this.selectedRecipeLiveData.postValue(selectedRecipe);
+    }
+
+    public LiveData<Step> getSelectedStepLiveData() {
+        return selectedStepLiveData;
+    }
+
+    public void setSelectedStep(@NonNull Step selectedStep) {
+        this.selectedStepLiveData.postValue(selectedStep);
     }
 
     public void fetchData() {

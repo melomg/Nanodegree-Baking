@@ -1,4 +1,4 @@
-package com.projects.melih.baking.ui.recipes;
+package com.projects.melih.baking.ui.recipe;
 
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.projects.melih.baking.R;
+import com.projects.melih.baking.common.Utils;
 import com.projects.melih.baking.databinding.ItemRecipeListBinding;
 import com.projects.melih.baking.model.Recipe;
 import com.projects.melih.baking.ui.base.ItemClickListener;
@@ -60,7 +61,10 @@ class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeVie
         void bindTo(@Nullable final Recipe recipe) {
             if (recipe != null) {
                 binding.setRecipe(recipe);
-                itemView.setOnClickListener(v -> recipeItemListener.onItemClick(recipe));
+                itemView.setOnClickListener(v -> {
+                    Utils.await(v);
+                    recipeItemListener.onItemClick(recipe);
+                });
             }
         }
     }
