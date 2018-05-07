@@ -1,6 +1,7 @@
 package com.projects.melih.baking.ui.main;
 
-import com.projects.melih.baking.ui.recipes.RecipeListFragment;
+import com.projects.melih.baking.ui.recipe.RecipeDetailFragment;
+import com.projects.melih.baking.ui.recipe.RecipeListFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -12,4 +13,7 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class MainActivityFragmentBuildersModule {
     @ContributesAndroidInjector
     abstract RecipeListFragment bindRecipeListFragment();
+
+    @ContributesAndroidInjector
+    abstract RecipeDetailFragment bindRecipeDetailFragment();
 }

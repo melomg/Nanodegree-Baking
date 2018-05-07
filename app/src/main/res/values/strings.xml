@@ -2,4 +2,8 @@
     <!-- General -->
     <string name="unknown_error">Unknown error!</string>
     <string name="network_error">Make sure you are connected to internet!</string>
+
+    <!-- RECIPE DETAIL-->
+    <string name="ingredients_header_u">INGREDIENTS</string>
+    <string name="steps_header_u">STEPS</string>
 </resources>

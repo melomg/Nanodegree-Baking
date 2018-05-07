@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.constraint.Group
+                android:id="@+id/ingredients_part"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="ingredients_header,ingredients_info,divider"
+                tools:visibility="visible"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/ingredients_header"
+                android:textStyle="bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/ingredients_header_u"
+                android:textColor="@color/gray"
+                android:layout_margin="@dimen/large_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/ingredients_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textIsSelectable="true"
+                android:layout_marginTop="@dimen/min_size"
+                app:layout_constraintEnd_toEndOf="@+id/ingredients_header"
+                app:layout_constraintStart_toStartOf="@+id/ingredients_header"
+                app:layout_constraintTop_toBottomOf="@+id/ingredients_header"
+                tools:text=" \u2219\ 2 CUP Graham Cracker crumbs"/>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/large_size"
+                android:background="@color/gray_light"
+                app:layout_constraintEnd_toEndOf="@+id/ingredients_header"
+                app:layout_constraintStart_toStartOf="@+id/ingredients_header"
+                app:layout_constraintTop_toBottomOf="@+id/ingredients_info"/>
+
+            <android.support.constraint.Group
+                android:id="@+id/steps_part"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="steps_header,recycler_view_steps"
+                tools:visibility="visible"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/steps_header"
+                android:textStyle="bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/steps_header_u"
+                android:layout_marginTop="@dimen/large_size"
+                android:textColor="@color/gray"
+                app:layout_constraintEnd_toEndOf="@+id/ingredients_header"
+                app:layout_constraintStart_toStartOf="@+id/ingredients_header"
+                app:layout_constraintTop_toBottomOf="@+id/divider"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_steps"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="@dimen/min_size"
+                app:layout_constraintEnd_toEndOf="@+id/ingredients_header"
+                app:layout_constraintStart_toStartOf="@+id/ingredients_header"
+                app:layout_constraintTop_toBottomOf="@+id/steps_header"
+                tools:listitem="@layout/item_step_list"/>
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+</layout>

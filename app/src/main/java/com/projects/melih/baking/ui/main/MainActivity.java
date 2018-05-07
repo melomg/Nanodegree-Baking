@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.projects.melih.baking.R;
 import com.projects.melih.baking.ui.base.BaseActivity;
-import com.projects.melih.baking.ui.recipes.RecipeListFragment;
+import com.projects.melih.baking.ui.recipe.RecipeListFragment;
 
 /**
  * Created by Melih Gültekin on 22.04.2018
