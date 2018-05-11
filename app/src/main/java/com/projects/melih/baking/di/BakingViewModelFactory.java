@@ -20,7 +20,7 @@ public class BakingViewModelFactory implements ViewModelProvider.Factory {
     private final Map<Class<? extends ViewModel>, Provider<ViewModel>> creators;
 
     @Inject
-    public BakingViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
+    BakingViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
         this.creators = creators;
     }
 

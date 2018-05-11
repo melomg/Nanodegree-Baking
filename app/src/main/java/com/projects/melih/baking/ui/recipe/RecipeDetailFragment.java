@@ -27,6 +27,7 @@ import com.projects.melih.baking.model.Recipe;
 import com.projects.melih.baking.model.Step;
 import com.projects.melih.baking.ui.base.BaseFragment;
 import com.projects.melih.baking.ui.main.RecipesViewModel;
+import com.projects.melih.baking.ui.step.StepDetailFragment;
 
 import java.util.List;
 import java.util.Objects;
@@ -61,10 +62,10 @@ public class RecipeDetailFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new StepListAdapter(step -> {
-            recipesViewModel.setSelectedStep(step);
+        adapter = new StepListAdapter(position -> {
+            recipesViewModel.setSelectedStepPosition(position);
             //TODO dont replace if tablet
-            //navigationListener.replaceFragment(StepDetailFragment.newInstance());
+            navigationListener.replaceFragment(StepDetailFragment.newInstance());
         });
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);

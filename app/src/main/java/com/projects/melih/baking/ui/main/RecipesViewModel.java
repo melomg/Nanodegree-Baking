@@ -3,9 +3,11 @@ package com.projects.melih.baking.ui.main;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 
+import com.projects.melih.baking.common.CollectionUtils;
 import com.projects.melih.baking.common.SingleLiveEvent;
 import com.projects.melih.baking.model.Recipe;
 import com.projects.melih.baking.model.Step;
@@ -27,7 +29,8 @@ public class RecipesViewModel extends ViewModel {
     private final MutableLiveData<Boolean> triggerListData;
     private final MediatorLiveData<List<Recipe>> recipesLiveData;
     private final MutableLiveData<Recipe> selectedRecipeLiveData;
-    private final MutableLiveData<Step> selectedStepLiveData;
+    private final LiveData<List<Step>> stepListLiveData;
+    private final MutableLiveData<Integer> selectedStepPositionLiveData;
     private final RecipeRepository recipeRepository;
     private Call<List<Recipe>> callRecipes;
 
@@ -41,7 +44,8 @@ public class RecipesViewModel extends ViewModel {
         recipesLiveData = new MediatorLiveData<>();
         recipesLiveData.addSource(triggerListData, state -> getRecipeList());
         selectedRecipeLiveData = new MutableLiveData<>();
-        selectedStepLiveData = new MutableLiveData<>();
+        stepListLiveData = Transformations.map(selectedRecipeLiveData, Recipe::getSteps);
+        selectedStepPositionLiveData = new MutableLiveData<>();
         getRecipeList();
     }
 
@@ -77,16 +81,37 @@ public class RecipesViewModel extends ViewModel {
         this.selectedRecipeLiveData.postValue(selectedRecipe);
     }
 
-    public LiveData<Step> getSelectedStepLiveData() {
-        return selectedStepLiveData;
+    public LiveData<List<Step>> getStepListLiveData() {
+        return stepListLiveData;
     }
 
-    public void setSelectedStep(@NonNull Step selectedStep) {
-        this.selectedStepLiveData.postValue(selectedStep);
+    public LiveData<Integer> getSelectedStepPositionLiveData() {
+        return selectedStepPositionLiveData;
+    }
+
+    public void setSelectedStepPosition(int selectedStepPosition) {
+        this.selectedStepPositionLiveData.postValue(selectedStepPosition);
     }
 
     public void fetchData() {
         triggerListData.setValue(true);
+    }
+
+    public void goToNextStep() {
+        List<Step> steps = stepListLiveData.getValue();
+        Integer position = selectedStepPositionLiveData.getValue();
+        if ((position != null) && (position < (CollectionUtils.size(steps) - 1))) {
+            position++;
+            selectedStepPositionLiveData.setValue(position);
+        }
+    }
+
+    public void goToPreviousStep() {
+        Integer position = selectedStepPositionLiveData.getValue();
+        if ((position != null) && (position > 0)) {
+            position--;
+            selectedStepPositionLiveData.setValue(position);
+        }
     }
 
     @Override

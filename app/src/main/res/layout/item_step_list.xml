@@ -16,9 +16,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/x_min_size"
         android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
         android:focusable="true"
-        app:cardBackgroundColor="@color/gray"
+        android:stateListAnimator="@animator/animator_clickable_state_list"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/xx_min_size"
         app:cardElevation="@dimen/xx_min_size">
 
@@ -30,7 +30,6 @@
                 android:id="@+id/step_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/transparent_gray"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:padding="@dimen/large_size"
