@@ -2,6 +2,7 @@ package com.projects.melih.baking.ui.step;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -38,6 +39,7 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
     private RecipesViewModel recipesViewModel;
     private StepPagerAdapter adapter;
     private VideoPlayerObserver videoPlayerObserver;
+    private int displayMode;
 
     public static StepDetailFragment newInstance() {
         return new StepDetailFragment();
@@ -64,51 +66,13 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
                 }
                 videoPlayerObserver.setUris(uris);
             }
-            adapter.setStepList(steps);
+            if (displayMode == Configuration.ORIENTATION_PORTRAIT) {
+                adapter.setStepList(steps);
+            }
         });
         recipesViewModel.getSelectedStepPositionLiveData().observe(this, position -> {
             if (position != null) {
-                List<Step> steps = recipesViewModel.getStepListLiveData().getValue();
-                final int stepListSize = CollectionUtils.size(steps);
-                binding.next.setVisibility(((stepListSize - 1) == position) ? View.GONE : View.VISIBLE);
-
-                if (stepListSize > 0) {
-                    @SuppressWarnings("ConstantConditions")
-                    Step selectedStep = steps.get(position);
-                    // if the video url of this step is empty show an image
-                    if (TextUtils.isEmpty(selectedStep.getVideoUrl())) {
-                        String thumbnailUrl = selectedStep.getThumbnailUrl();
-                        RequestOptions options = new RequestOptions()
-                                .centerCrop()
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .dontAnimate()
-                                .placeholder(R.drawable.ic_recipe_placeholder)
-                                .error(R.drawable.ic_recipe_placeholder);
-                        Glide.with(context)
-                                .asBitmap()
-                                .apply(options)
-                                .load(thumbnailUrl)
-                                .thumbnail(0.1f)
-                                .into(binding.stepImage);
-                        videoPlayerObserver.stopMediaPlayer();
-
-                        binding.stepImage.setVisibility(View.VISIBLE);
-                        binding.playerView.setVisibility(View.GONE);
-                    } else {
-                        binding.stepImage.setVisibility(View.GONE);
-                        binding.playerView.setVisibility(View.VISIBLE);
-                        videoPlayerObserver.setSelectedVideoIndex(position);
-                    }
-                }
-                if (position == 0) {
-                    binding.previous.setVisibility(View.GONE);
-                    binding.stepCount.setText("");
-                } else {
-                    binding.previous.setVisibility(View.VISIBLE);
-                    binding.stepCount.setText(context.getString(R.string.step_count, position, (stepListSize - 1)));
-                }
-
-                binding.viewPager.setCurrentItem(position);
+                updateUI(recipesViewModel.getStepListLiveData().getValue(), position);
             }
         });
         return binding.getRoot();
@@ -117,14 +81,19 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter = new StepPagerAdapter(context);
-        binding.viewPager.setAdapter(adapter);
-        binding.viewPager.setCanScroll(false);
+
+        displayMode = getResources().getConfiguration().orientation;
+        if (displayMode == Configuration.ORIENTATION_PORTRAIT) {
+            adapter = new StepPagerAdapter(context);
+            binding.viewPager.setAdapter(adapter);
+            binding.viewPager.setCanScroll(false);
+        } else {
+            showToolbarAndStatusBar(false);
+        }
 
         videoPlayerObserver.setPlayerView(context, binding.playerView);
-
-        binding.previous.setOnClickListener(this);
-        binding.next.setOnClickListener(this);
+        binding.footerStep.previous.setOnClickListener(this);
+        binding.footerStep.next.setOnClickListener(this);
     }
 
     @Override
@@ -137,6 +106,51 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
             case R.id.next:
                 recipesViewModel.goToNextStep();
                 break;
+        }
+    }
+
+    private void updateUI(@Nullable List<Step> steps, Integer position) {
+        final int stepListSize = CollectionUtils.size(steps);
+        if (stepListSize > 0) {
+            @SuppressWarnings("ConstantConditions")
+            Step selectedStep = steps.get(position);
+            // if the video url of this step is empty show an image
+            if (TextUtils.isEmpty(selectedStep.getVideoUrl())) {
+                String thumbnailUrl = selectedStep.getThumbnailUrl();
+                RequestOptions options = new RequestOptions()
+                        .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .placeholder(R.drawable.ic_recipe_placeholder)
+                        .error(R.drawable.ic_recipe_placeholder);
+                Glide.with(context)
+                        .asBitmap()
+                        .apply(options)
+                        .load(thumbnailUrl)
+                        .thumbnail(0.1f)
+                        .into(binding.stepImage);
+                videoPlayerObserver.stopMediaPlayer();
+
+                binding.stepImage.setVisibility(View.VISIBLE);
+                binding.playerView.setVisibility(View.GONE);
+            } else {
+                binding.stepImage.setVisibility(View.GONE);
+                binding.playerView.setVisibility(View.VISIBLE);
+                videoPlayerObserver.setSelectedVideoIndex(position);
+            }
+        }
+
+        binding.footerStep.next.setVisibility(((stepListSize - 1) == position) ? View.GONE : View.VISIBLE);
+        if (position == 0) {
+            binding.footerStep.previous.setVisibility(View.GONE);
+            binding.footerStep.stepCount.setText("");
+        } else {
+            binding.footerStep.previous.setVisibility(View.VISIBLE);
+            binding.footerStep.stepCount.setText(context.getString(R.string.step_count, position, (stepListSize - 1)));
+        }
+
+        if (displayMode == Configuration.ORIENTATION_PORTRAIT) {
+            binding.viewPager.setCurrentItem(position);
         }
     }
 }
