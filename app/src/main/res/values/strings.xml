@@ -6,4 +6,9 @@
     <!-- RECIPE DETAIL-->
     <string name="ingredients_header_u">INGREDIENTS</string>
     <string name="steps_header_u">STEPS</string>
+
+    <!-- STEP DETAIL-->
+    <string name="previous_u">PREVIOUS</string>
+    <string name="next_u">NEXT</string>
+    <string name="step_count">%1$d / %2$d</string>
 </resources>

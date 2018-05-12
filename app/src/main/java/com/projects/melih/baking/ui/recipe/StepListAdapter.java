@@ -20,10 +20,10 @@ import java.util.List;
  * Created by Melih Gültekin on 05.05.2018
  */
 class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepViewHolder> {
-    private final ItemClickListener<Step> recipeItemListener;
+    private final ItemClickListener recipeItemListener;
     private final AsyncListDiffer<Step> differ = new AsyncListDiffer<>(this, Step.DIFF_CALLBACK);
 
-    StepListAdapter(@NonNull ItemClickListener<Step> recipeItemListener) {
+    StepListAdapter(@NonNull ItemClickListener recipeItemListener) {
         this.recipeItemListener = recipeItemListener;
     }
 
@@ -50,22 +50,27 @@ class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepViewHolde
 
     static class StepViewHolder extends RecyclerView.ViewHolder {
         private final ItemStepListBinding binding;
-        private final ItemClickListener<Step> recipeItemListener;
 
-        StepViewHolder(@NonNull ItemStepListBinding binding, @NonNull ItemClickListener<Step> recipeItemListener) {
+        StepViewHolder(@NonNull ItemStepListBinding binding, @NonNull final ItemClickListener recipeItemListener) {
             super(binding.getRoot());
             this.binding = binding;
-            this.recipeItemListener = recipeItemListener;
+            itemView.setOnClickListener(v -> {
+                Utils.await(v);
+                final int adapterPosition = getAdapterPosition();
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    recipeItemListener.onItemClick(adapterPosition);
+                }
+            });
         }
 
         void bindTo(@Nullable final Step recipe) {
             if (recipe != null) {
                 binding.setStep(recipe);
-                itemView.setOnClickListener(v -> {
-                    Utils.await(v);
-                    recipeItemListener.onItemClick(recipe);
-                });
             }
         }
+    }
+
+    public interface ItemClickListener {
+        void onItemClick(int position);
     }
 }
