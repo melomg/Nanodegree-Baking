@@ -3,6 +3,7 @@ package com.projects.melih.baking.ui.recipe;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.recyclerview.extensions.AsyncListDiffer;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +13,6 @@ import com.projects.melih.baking.R;
 import com.projects.melih.baking.common.Utils;
 import com.projects.melih.baking.databinding.ItemStepListBinding;
 import com.projects.melih.baking.model.Step;
-import com.projects.melih.baking.ui.base.ItemClickListener;
 
 import java.util.List;
 
@@ -63,9 +63,14 @@ class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepViewHolde
             });
         }
 
-        void bindTo(@Nullable final Step recipe) {
-            if (recipe != null) {
-                binding.setStep(recipe);
+        void bindTo(@Nullable final Step step) {
+            if (step != null) {
+                binding.setStep(step);
+                if (step.isSelected()) {
+                    binding.cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimary));
+                } else {
+                    binding.cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.white));
+                }
             }
         }
     }

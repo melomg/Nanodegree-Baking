@@ -59,10 +59,7 @@ public class RecipeListFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         binding.swipeRefresh.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
 
-        adapter = new RecipeListAdapter(recipe -> {
-            recipesViewModel.setSelectedRecipe(recipe);
-            navigationListener.replaceFragment(RecipeDetailFragment.newInstance());
-        });
+        adapter = new RecipeListAdapter(recipe -> startActivity(RecipeActivity.newIntent(context, recipe)));
 
         GridAutoFitLayoutManager layoutManager = new GridAutoFitLayoutManager(context, R.dimen.list_item_width);
         binding.recyclerView.setLayoutManager(layoutManager);

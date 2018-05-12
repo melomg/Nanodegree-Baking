@@ -1,8 +1,6 @@
 package com.projects.melih.baking.ui.step;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,25 +19,22 @@ import com.projects.melih.baking.common.Utils;
 import com.projects.melih.baking.databinding.FragmentStepDetailBinding;
 import com.projects.melih.baking.model.Step;
 import com.projects.melih.baking.ui.base.BaseFragment;
-import com.projects.melih.baking.ui.main.RecipesViewModel;
+import com.projects.melih.baking.ui.recipe.RecipeViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.inject.Inject;
-
 /**
  * Created by Melih Gültekin on 06.05.2018
+ *
+ * Detail Fragment of RecipeDetailFragment
  */
 public class StepDetailFragment extends BaseFragment implements View.OnClickListener {
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
     private FragmentStepDetailBinding binding;
-    private RecipesViewModel recipesViewModel;
+    private RecipeViewModel recipeViewModel;
     private StepPagerAdapter adapter;
     private VideoPlayerObserver videoPlayerObserver;
-    private int displayMode;
 
     public static StepDetailFragment newInstance() {
         return new StepDetailFragment();
@@ -56,9 +51,9 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_step_detail, container, false);
-        recipesViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(RecipesViewModel.class);
+        recipeViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(RecipeViewModel.class);
 
-        recipesViewModel.getStepListLiveData().observe(this, steps -> {
+        recipeViewModel.getStepListLiveData().observe(this, steps -> {
             if (CollectionUtils.isNotEmpty(steps)) {
                 ArrayList<String> uris = new ArrayList<>();
                 for (Step step : steps) {
@@ -66,13 +61,18 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
                 }
                 videoPlayerObserver.setUris(uris);
             }
-            if (displayMode == Configuration.ORIENTATION_PORTRAIT) {
+            if (!context.getResources().getBoolean(R.bool.is_phone_and_land)) {
                 adapter.setStepList(steps);
             }
+
+            Integer selectedPosition = recipeViewModel.getSelectedStepPositionLiveData().getValue();
+            if (selectedPosition == null) {
+                updateUI(steps, 0);
+            }
         });
-        recipesViewModel.getSelectedStepPositionLiveData().observe(this, position -> {
+        recipeViewModel.getSelectedStepPositionLiveData().observe(this, position -> {
             if (position != null) {
-                updateUI(recipesViewModel.getStepListLiveData().getValue(), position);
+                updateUI(recipeViewModel.getStepListLiveData().getValue(), position);
             }
         });
         return binding.getRoot();
@@ -82,18 +82,23 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        displayMode = getResources().getConfiguration().orientation;
-        if (displayMode == Configuration.ORIENTATION_PORTRAIT) {
+        if (context.getResources().getBoolean(R.bool.is_phone_and_land)) {
+            showToolbarAndStatusBar(false);
+            binding.footerStep.previous.setOnClickListener(this);
+            binding.footerStep.next.setOnClickListener(this);
+        } else {
+            // phone portrait or tablet
             adapter = new StepPagerAdapter(context);
             binding.viewPager.setAdapter(adapter);
             binding.viewPager.setCanScroll(false);
-        } else {
-            showToolbarAndStatusBar(false);
+            if (context.getResources().getBoolean(R.bool.is_phone)) {
+                // only phone portrait
+                binding.footerStep.previous.setOnClickListener(this);
+                binding.footerStep.next.setOnClickListener(this);
+            }
         }
 
         videoPlayerObserver.setPlayerView(context, binding.playerView);
-        binding.footerStep.previous.setOnClickListener(this);
-        binding.footerStep.next.setOnClickListener(this);
     }
 
     @Override
@@ -101,10 +106,10 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
         Utils.await(v);
         switch (v.getId()) {
             case R.id.previous:
-                recipesViewModel.goToPreviousStep();
+                recipeViewModel.goToPreviousStep();
                 break;
             case R.id.next:
-                recipesViewModel.goToNextStep();
+                recipeViewModel.goToNextStep();
                 break;
         }
     }
@@ -140,16 +145,18 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
             }
         }
 
-        binding.footerStep.next.setVisibility(((stepListSize - 1) == position) ? View.GONE : View.VISIBLE);
-        if (position == 0) {
-            binding.footerStep.previous.setVisibility(View.GONE);
-            binding.footerStep.stepCount.setText("");
-        } else {
-            binding.footerStep.previous.setVisibility(View.VISIBLE);
-            binding.footerStep.stepCount.setText(context.getString(R.string.step_count, position, (stepListSize - 1)));
+        if (context.getResources().getBoolean(R.bool.is_phone)) {
+            binding.footerStep.next.setVisibility(((stepListSize - 1) == position) ? View.GONE : View.VISIBLE);
+            if (position == 0) {
+                binding.footerStep.previous.setVisibility(View.GONE);
+                binding.footerStep.stepCount.setText("");
+            } else {
+                binding.footerStep.previous.setVisibility(View.VISIBLE);
+                binding.footerStep.stepCount.setText(context.getString(R.string.step_count, position, (stepListSize - 1)));
+            }
         }
 
-        if (displayMode == Configuration.ORIENTATION_PORTRAIT) {
+        if (!context.getResources().getBoolean(R.bool.is_phone_and_land)) {
             binding.viewPager.setCurrentItem(position);
         }
     }
