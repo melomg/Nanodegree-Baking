@@ -32,7 +32,7 @@ import java.util.Objects;
 
 /**
  * Created by Melih Gültekin on 06.05.2018
- *
+ * <p>
  * Master Fragment
  */
 public class RecipeDetailFragment extends BaseFragment {
@@ -53,6 +53,7 @@ public class RecipeDetailFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         adapter = new StepListAdapter(position -> {
             // changes selected item color if it is not phone
@@ -93,6 +94,7 @@ public class RecipeDetailFragment extends BaseFragment {
 
     private void updateUI(@Nullable Recipe selectedRecipe) {
         if (selectedRecipe != null) {
+            getSupportActionBar().setTitle(selectedRecipe.getName());
             final List<Ingredient> ingredients = selectedRecipe.getIngredients();
             if (CollectionUtils.isNotEmpty(ingredients)) {
                 addIngredients(ingredients);

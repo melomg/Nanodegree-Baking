@@ -27,7 +27,7 @@ import java.util.Objects;
 
 /**
  * Created by Melih Gültekin on 06.05.2018
- *
+ * <p>
  * Detail Fragment of RecipeDetailFragment
  */
 public class StepDetailFragment extends BaseFragment implements View.OnClickListener {
@@ -83,6 +83,7 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
         super.onViewCreated(view, savedInstanceState);
 
         if (context.getResources().getBoolean(R.bool.is_phone_and_land)) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             showToolbarAndStatusBar(false);
             binding.footerStep.previous.setOnClickListener(this);
             binding.footerStep.next.setOnClickListener(this);
