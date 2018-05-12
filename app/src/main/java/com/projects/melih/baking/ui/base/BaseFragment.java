@@ -66,7 +66,7 @@ public class BaseFragment extends DaggerFragment {
     }
 
     @NonNull
-    private ActionBar getSupportActionBar() {
+    protected ActionBar getSupportActionBar() {
         if (activity == null) {
             activity = (AppCompatActivity) getActivity();
         }

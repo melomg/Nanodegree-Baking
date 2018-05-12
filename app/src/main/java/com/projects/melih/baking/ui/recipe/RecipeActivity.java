@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.MenuItem;
 
 import com.projects.melih.baking.R;
 import com.projects.melih.baking.model.Recipe;
@@ -45,5 +46,15 @@ public class RecipeActivity extends BaseActivity {
     protected void onResumeFragments() {
         super.onResumeFragments();
         viewModel.setSelectedRecipe(recipe);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
     }
 }
