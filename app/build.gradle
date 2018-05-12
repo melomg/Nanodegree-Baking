@@ -72,6 +72,7 @@ dependencies {
     // Android Architecture Components
     implementation "android.arch.lifecycle:extensions:${aac}"
     implementation "android.arch.lifecycle:runtime:${aac}"
+    implementation 'com.android.support:support-v4:27.1.1'
     annotationProcessor "android.arch.lifecycle:compiler:${aac}"
 
     // Dagger
