@@ -9,8 +9,8 @@ import java.util.concurrent.Executors;
 
 /**
  * Created by Melih Gültekin on 13.05.2018
- * TODO add url
- * <p>
+ *
+ * @see <a href="https://github.com/googlesamples/android-architecture-components/blob/master/PersistenceMigrationsSample/app/src/main/java/com/example/android/persistence/migrations/AppExecutors.java">AppExecutors.java/a>
  * <p>
  * Global executor pools for the whole application.
  * <p>
@@ -19,11 +19,8 @@ import java.util.concurrent.Executors;
  */
 public class AppExecutors {
     private static final int THREAD_COUNT = 3;
-
     private final Executor diskIO;
-
     private final Executor networkIO;
-
     private final Executor mainThread;
 
     private AppExecutors(Executor diskIO, Executor networkIO, Executor mainThread) {
