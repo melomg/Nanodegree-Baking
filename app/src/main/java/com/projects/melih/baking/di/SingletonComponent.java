@@ -1,7 +1,7 @@
 package com.projects.melih.baking.di;
 
 import com.projects.melih.baking.BakingApplication;
-import com.projects.melih.baking.repository.remote.ApiModule;
+import com.projects.melih.baking.repository.ApiAndDataModule;
 
 import javax.inject.Singleton;
 
@@ -17,7 +17,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         AndroidSupportInjectionModule.class,
         SingletonModule.class,
         ActivityBuilder.class,
-        ApiModule.class
+        ApiAndDataModule.class
 })
 public interface SingletonComponent extends AndroidInjector<BakingApplication> {
 

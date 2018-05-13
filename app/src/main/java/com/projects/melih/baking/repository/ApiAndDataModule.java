@@ -1,10 +1,15 @@
-package com.projects.melih.baking.repository.remote;
+package com.projects.melih.baking.repository;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.projects.melih.baking.BuildConfig;
+import com.projects.melih.baking.repository.local.LocalRecipesDataSource;
+import com.projects.melih.baking.repository.local.RecipeDao;
+import com.projects.melih.baking.repository.local.RecipesDatabase;
+import com.projects.melih.baking.repository.remote.BakingService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,18 +30,30 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 @SuppressWarnings("unused")
 @Module
-public class ApiModule {
+public class ApiAndDataModule {
     private static final long TIMEOUT_SECOND = 60;
 
     @Singleton
     @Provides
-    BakingService provideServices(Retrofit retrofit) {
+    LocalRecipesDataSource provideLocalRecipeDataSource(@NonNull RecipesDatabase database) {
+        return new LocalRecipesDataSource(database.recipeDao());
+    }
+
+    @Singleton
+    @Provides
+    RecipesDatabase provideDatabase(@NonNull Context context) {
+        return RecipesDatabase.getInstance(context);
+    }
+
+    @Singleton
+    @Provides
+    BakingService provideServices(@NonNull Retrofit retrofit) {
         return retrofit.create(BakingService.class);
     }
 
     @Singleton
     @Provides
-    Retrofit provideRetrofit(OkHttpClient okHttpClient) {
+    Retrofit provideRetrofit(@NonNull OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(BakingService.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())

@@ -1,5 +1,7 @@
 package com.projects.melih.baking.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -15,8 +17,10 @@ import java.util.List;
  * Created by Melih Gültekin on 22.04.2018
  */
 @SuppressWarnings("unused")
+@Entity(tableName = "recipes")
 public class Recipe implements Parcelable {
 
+    @PrimaryKey
     @SerializedName("id")
     private long id;
 
@@ -122,7 +126,7 @@ public class Recipe implements Parcelable {
     public Recipe() {
     }
 
-    protected Recipe(Parcel in) {
+    private Recipe(Parcel in) {
         this.id = in.readLong();
         this.name = in.readString();
         this.ingredients = new ArrayList<>();

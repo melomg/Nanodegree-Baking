@@ -10,9 +10,9 @@ import java.lang.annotation.RetentionPolicy;
  * Created by Melih Gültekin on 24.02.2018
  */
 public class ErrorState {
-    private static final int STATE_FAILED = 0;
-    private static final int STATE_NO_NETWORK = STATE_FAILED + 1;
-    private static final int STATE_EMPTY = STATE_NO_NETWORK + 1;
+    public static final int STATE_FAILED = 0;
+    public static final int STATE_NO_NETWORK = STATE_FAILED + 1;
+    public static final int STATE_EMPTY = STATE_NO_NETWORK + 1;
 
     public static final ErrorState FAILED = new ErrorState(STATE_FAILED);
     public static final ErrorState NO_NETWORK = new ErrorState(STATE_NO_NETWORK);
@@ -35,6 +35,10 @@ public class ErrorState {
 
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    public int getState() {
+        return state;
     }
 
     public static ErrorState error(@Nullable String errorMessage) {

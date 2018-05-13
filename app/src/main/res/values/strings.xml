@@ -1,6 +1,6 @@
 <resources>
     <!-- General -->
-    <string name="unknown_error">Unknown error!</string>
+    <string name="unknown_error">Unknown error! Try again please.</string>
     <string name="network_error">Make sure you are connected to internet!</string>
 
     <!-- RECIPE DETAIL-->
