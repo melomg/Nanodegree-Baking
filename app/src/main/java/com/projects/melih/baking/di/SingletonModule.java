@@ -3,6 +3,7 @@ package com.projects.melih.baking.di;
 import android.content.Context;
 
 import com.projects.melih.baking.BakingApplication;
+import com.projects.melih.baking.AppExecutors;
 
 import javax.inject.Singleton;
 
@@ -19,5 +20,11 @@ public class SingletonModule {
     @Singleton
     Context provideContext(BakingApplication application) {
         return application;
+    }
+
+    @Provides
+    @Singleton
+    AppExecutors provideAppExecutors() {
+        return new AppExecutors();
     }
 }

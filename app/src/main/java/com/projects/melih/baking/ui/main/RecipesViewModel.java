@@ -8,7 +8,7 @@ import android.arch.lifecycle.ViewModel;
 import com.projects.melih.baking.common.SingleLiveEvent;
 import com.projects.melih.baking.model.Recipe;
 import com.projects.melih.baking.repository.remote.ErrorState;
-import com.projects.melih.baking.repository.remote.RecipeRepository;
+import com.projects.melih.baking.repository.RecipeRepository;
 
 import java.util.List;
 
@@ -35,17 +35,32 @@ public class RecipesViewModel extends ViewModel {
         loadingLiveData = new MutableLiveData<>();
         triggerListData = new MutableLiveData<>();
         recipesLiveData = new MediatorLiveData<>();
-        recipesLiveData.addSource(triggerListData, state -> getRecipeList());
+        recipesLiveData.addSource(triggerListData, state -> fetchRecipeListFromNetwork());
         getRecipeList();
     }
 
-    private void getRecipeList() {
+    private void fetchRecipeListFromNetwork() {
         loadingLiveData.setValue(true);
-        callRecipes = recipeRepository.loadRecipes((data, errorState) -> {
+        if (callRecipes != null) {
+            callRecipes.cancel();
+        }
+        callRecipes = recipeRepository.fetchRecipesFromNetwork((data, errorState) -> {
             loadingLiveData.setValue(false);
             if (data == null) {
                 errorLiveData.setValue(errorState);
             } else {
+                recipesLiveData.setValue(data);
+            }
+        });
+    }
+
+    private void getRecipeList() {
+        loadingLiveData.setValue(true);
+        recipeRepository.getCachedRecipes((data, errorState) -> {
+            if (data == null) {
+                fetchRecipeListFromNetwork();
+            } else {
+                loadingLiveData.setValue(false);
                 recipesLiveData.setValue(data);
             }
         });

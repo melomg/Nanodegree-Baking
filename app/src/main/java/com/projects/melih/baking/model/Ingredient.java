@@ -49,7 +49,6 @@ public class Ingredient implements Parcelable {
         this.name = name;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -65,7 +64,7 @@ public class Ingredient implements Parcelable {
     public Ingredient() {
     }
 
-    protected Ingredient(Parcel in) {
+    private Ingredient(Parcel in) {
         this.quantity = in.readFloat();
         this.measure = in.readString();
         this.name = in.readString();

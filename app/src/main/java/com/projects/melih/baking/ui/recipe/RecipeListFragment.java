@@ -11,9 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.projects.melih.baking.R;
-import com.projects.melih.baking.common.Constants;
 import com.projects.melih.baking.components.GridAutoFitLayoutManager;
 import com.projects.melih.baking.databinding.FragmentRecipeListBinding;
+import com.projects.melih.baking.repository.remote.ErrorState;
 import com.projects.melih.baking.ui.base.BaseFragment;
 import com.projects.melih.baking.ui.main.RecipesViewModel;
 
@@ -47,8 +47,18 @@ public class RecipeListFragment extends BaseFragment {
                 binding.swipeRefresh.setRefreshing(false);
             }
         });
-        recipesViewModel.getErrorLiveData().observe(this,
-                errorState -> showToast((errorState == null) ? Constants.UNKNOWN_ERROR : errorState.getErrorMessage()));
+        recipesViewModel.getErrorLiveData().observe(this, errorState -> {
+            if (errorState != null) {
+                switch (errorState.getState()) {
+                    case ErrorState.STATE_NO_NETWORK:
+                        showToast(context.getString(R.string.network_error));
+                        break;
+                    default:
+                        showToast(context.getString(R.string.unknown_error));
+                        break;
+                }
+            }
+        });
 
         recipesViewModel.getRecipesLiveData().observe(this, recipes -> adapter.submitRecipeList(recipes));
         return binding.getRoot();

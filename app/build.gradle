@@ -19,6 +19,12 @@ android {
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resValue "string", "app_name", "Baking Time"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
@@ -53,6 +59,7 @@ android {
 ext {
     supportLibrary = "27.1.1"
     aac = "1.1.1"
+    room = "1.1.0"
     dagger = "2.15"
     retrofit = "2.3.0"
     glide = "4.6.1"
@@ -72,6 +79,11 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:${aac}"
     implementation "android.arch.lifecycle:runtime:${aac}"
     annotationProcessor "android.arch.lifecycle:compiler:${aac}"
+
+    // Room components
+    implementation "android.arch.persistence.room:runtime:${room}"
+    annotationProcessor "android.arch.persistence.room:compiler:${room}"
+    androidTestImplementation "android.arch.persistence.room:testing:${room}"
 
     // Dagger
     implementation "com.google.dagger:dagger:${dagger}"
