@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.projects.melih.baking.R;
-import com.projects.melih.baking.components.GridAutoFitLayoutManager;
 import com.projects.melih.baking.databinding.FragmentRecipeListBinding;
 import com.projects.melih.baking.repository.remote.ErrorState;
 import com.projects.melih.baking.ui.base.BaseFragment;
@@ -70,12 +69,8 @@ public class RecipeListFragment extends BaseFragment {
         binding.swipeRefresh.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
 
         adapter = new RecipeListAdapter(recipe -> startActivity(RecipeActivity.newIntent(context, recipe)));
-
-        GridAutoFitLayoutManager layoutManager = new GridAutoFitLayoutManager(context, R.dimen.list_item_width);
-        binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setHasFixedSize(false);
         binding.recyclerView.setAdapter(adapter);
-
         binding.swipeRefresh.setOnRefreshListener(() -> recipesViewModel.fetchData());
     }
 }
