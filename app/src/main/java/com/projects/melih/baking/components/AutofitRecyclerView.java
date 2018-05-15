@@ -31,13 +31,13 @@ public class AutofitRecyclerView extends RecyclerView {
 
     public AutofitRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        manager = new GridLayoutManager(getContext(), DEFAULT_SPAN_COUNT);
         if (attrs != null) {
             TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.AutofitRecyclerView);
             columnWidth = array.getDimensionPixelSize(R.styleable.AutofitRecyclerView_itemWidth, -1);
             addItemDecoration(new SpaceItemDecoration(context.getResources().getDimensionPixelSize(R.dimen.x_min_size)));
             array.recycle();
         }
+        manager = new GridLayoutManager(getContext(), DEFAULT_SPAN_COUNT);
         setLayoutManager(manager);
     }
 
