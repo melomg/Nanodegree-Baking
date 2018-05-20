@@ -15,6 +15,8 @@ public interface RecipesDataSource {
      */
     List<Recipe> getAllRecipes();
 
+    Recipe getRecipeById(long id);
+
     /**
      * Inserts the recipes in the data source, or, if it is an existing recipe list, it updates it.
      *

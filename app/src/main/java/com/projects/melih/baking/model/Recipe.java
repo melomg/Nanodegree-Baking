@@ -30,7 +30,7 @@ public class Recipe implements Parcelable {
 
     @SerializedName("ingredients")
     @Nullable
-    private List<Ingredient> ingredients;
+    private ArrayList<Ingredient> ingredients;
 
     @SerializedName("steps")
     @Nullable
@@ -61,11 +61,11 @@ public class Recipe implements Parcelable {
     }
 
     @Nullable
-    public List<Ingredient> getIngredients() {
+    public ArrayList<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(@Nullable List<Ingredient> ingredients) {
+    public void setIngredients(@Nullable ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 

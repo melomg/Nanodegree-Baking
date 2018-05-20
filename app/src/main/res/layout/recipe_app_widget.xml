@@ -1,0 +1,37 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white">
+
+    <TextView
+        android:id="@+id/recipe_name"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:paddingStart="@dimen/large_size"
+        android:paddingEnd="@dimen/large_size"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:background="@color/colorPrimary"
+        android:gravity="center|start"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        tools:text="Nutella Pie - Ingredients"/>
+
+    <ListView
+        android:id="@+id/list_view_ingredients"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/appwidget_text"
+        android:layout_below="@+id/recipe_name"/>
+
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textIsSelectable="true"
+        android:gravity="center"
+        android:text="@string/appwidget_empty_view"/>
+</RelativeLayout>

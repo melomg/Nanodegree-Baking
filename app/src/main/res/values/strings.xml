@@ -11,4 +11,10 @@
     <string name="previous_u">PREVIOUS</string>
     <string name="next_u">NEXT</string>
     <string name="step_count">%1$d / %2$d</string>
+
+    <!-- WIDGET -->
+    <string name="appwidget_text">Recipe Ingredients</string>
+    <string name="choose_recipe">Select a recipe</string>
+    <string name="widget_recipe_name">%1$s - Ingredients</string>
+    <string name="appwidget_empty_view">Ingredients are empty</string>
 </resources>

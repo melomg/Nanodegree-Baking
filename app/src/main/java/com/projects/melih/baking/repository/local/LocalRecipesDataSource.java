@@ -27,6 +27,11 @@ public class LocalRecipesDataSource implements RecipesDataSource {
     }
 
     @Override
+    public Recipe getRecipeById(long id) {
+        return recipeDao.getRecipe(id);
+    }
+
+    @Override
     public void insertAllRecipes(List<Recipe> recipes) {
         recipeDao.insertAll(recipes);
     }
