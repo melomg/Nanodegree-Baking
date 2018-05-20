@@ -8,6 +8,7 @@ import com.projects.melih.baking.model.Ingredient;
 import com.projects.melih.baking.model.Step;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,14 +20,14 @@ public class Converters {
     }
 
     @TypeConverter
-    public static List<Ingredient> fromIngredientString(String value) {
+    public static ArrayList<Ingredient> fromIngredientString(String value) {
         Type listType = new TypeToken<List<Ingredient>>() {
         }.getType();
         return new Gson().fromJson(value, listType);
     }
 
     @TypeConverter
-    public static String fromIngredientList(List<Ingredient> list) {
+    public static String fromIngredientList(ArrayList<Ingredient> list) {
         return new Gson().toJson(list);
     }
 

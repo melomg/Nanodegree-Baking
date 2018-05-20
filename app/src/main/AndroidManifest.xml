@@ -36,7 +36,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".widget.RecipeIngredientsService"/>
+        <service
+            android:name=".widget.GridWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
         <receiver android:name=".ui.step.VideoPlayerObserver$MediaReceiver">
             <intent-filter>

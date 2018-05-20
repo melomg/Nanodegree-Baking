@@ -13,7 +13,7 @@ import com.projects.melih.baking.model.Recipe;
 /**
  * Created by Melih Gültekin on 13.05.2018
  */
-@Database(entities = {Recipe.class}, version = 2)
+@Database(entities = {Recipe.class}, version = 3)
 @TypeConverters({Converters.class})
 public abstract class RecipesDatabase extends RoomDatabase {
     private static final Object lock = new Object();

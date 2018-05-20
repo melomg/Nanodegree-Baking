@@ -6,7 +6,7 @@
     android:updatePeriodMillis="86400000"
     android:previewImage="@drawable/ic_launcher_foreground"
     android:initialLayout="@layout/recipe_app_widget"
-    android:resizeMode="vertical"
+    android:resizeMode="vertical|horizontal"
     android:widgetCategory="home_screen"
     android:configure="com.projects.melih.baking.widget.RecipeAppWidgetConfigure"
     android:initialKeyguardLayout="@layout/recipe_app_widget"/>

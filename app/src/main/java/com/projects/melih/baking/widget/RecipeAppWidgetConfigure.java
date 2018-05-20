@@ -6,15 +6,14 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
+import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.projects.melih.baking.R;
 import com.projects.melih.baking.common.CollectionUtils;
-import com.projects.melih.baking.databinding.RecipeAppwidgetConfigureBinding;
 import com.projects.melih.baking.model.Recipe;
 import com.projects.melih.baking.repository.remote.ErrorState;
 import com.projects.melih.baking.ui.base.BaseActivity;
@@ -32,21 +31,21 @@ public class RecipeAppWidgetConfigure extends BaseActivity {
     private static final String PREFS_RECIPE = "pref_recipe";
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-    private RecipeAppwidgetConfigureBinding binding;
-    private RecipesViewModel recipesViewModel;
     private RecipeWidgetListAdapter adapter;
     private int appWidgetId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.recipe_appwidget_configure);
+        setContentView(R.layout.recipe_appwidget_configure);
         setResult(RESULT_CANCELED);
         setContentView(R.layout.recipe_appwidget_configure);
         final ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setTitle(getString(R.string.choose_recipe));
         }
+
+        final ListView listView = findViewById(R.id.list_view);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -57,14 +56,7 @@ public class RecipeAppWidgetConfigure extends BaseActivity {
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
         } else {
-            recipesViewModel = ViewModelProviders.of(Objects.requireNonNull(this), viewModelFactory).get(RecipesViewModel.class);
-            recipesViewModel.getLoadingLiveData().observe(this, isLoading -> {
-                if ((isLoading != null) && isLoading) {
-                    //binding.loading.show();
-                } else {
-                    //binding.loading.setVisibility(View.GONE);
-                }
-            });
+            RecipesViewModel recipesViewModel = ViewModelProviders.of(Objects.requireNonNull(this), viewModelFactory).get(RecipesViewModel.class);
             recipesViewModel.getErrorLiveData().observe(this, errorState -> {
                 if (errorState != null) {
                     switch (errorState.getState()) {
@@ -81,8 +73,8 @@ public class RecipeAppWidgetConfigure extends BaseActivity {
             recipesViewModel.getRecipesLiveData().observe(this, recipes -> {
                 if (CollectionUtils.isNotEmpty(recipes)) {
                     adapter = new RecipeWidgetListAdapter(this, recipes);
-                    binding.listView.setAdapter(adapter);
-                    binding.listView.setOnItemClickListener((parent, view, position, id) -> {
+                    listView.setAdapter(adapter);
+                    listView.setOnItemClickListener((parent, view, position, id) -> {
                         Recipe recipe = recipes.get(position);
                         final RecipeAppWidgetConfigure context = RecipeAppWidgetConfigure.this;
                         saveRecipe(context.getApplicationContext(), appWidgetId, recipe);
