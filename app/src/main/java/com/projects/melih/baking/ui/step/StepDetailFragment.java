@@ -1,5 +1,6 @@
 package com.projects.melih.baking.ui.step;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -25,12 +26,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 /**
  * Created by Melih Gültekin on 06.05.2018
  * <p>
- * Detail Fragment of RecipeDetailFragment
+ * Detail Fragment(Second Pane) of RecipeDetailFragment
  */
 public class StepDetailFragment extends BaseFragment implements View.OnClickListener {
+    @Inject
+    public ViewModelProvider.Factory viewModelFactory;
     private FragmentStepDetailBinding binding;
     private RecipeViewModel recipeViewModel;
     private StepPagerAdapter adapter;
@@ -51,7 +56,7 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_step_detail, container, false);
-        recipeViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(RecipeViewModel.class);
+        recipeViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(RecipeViewModel.class);
 
         recipeViewModel.getStepListLiveData().observe(this, steps -> {
             if (CollectionUtils.isNotEmpty(steps)) {

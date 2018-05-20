@@ -3,6 +3,7 @@ package com.projects.melih.baking.repository;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.test.espresso.idling.CountingIdlingResource;
 
 import com.projects.melih.baking.AppExecutors;
 import com.projects.melih.baking.common.CollectionUtils;
@@ -35,6 +36,9 @@ public class RecipeRepository {
     private final AppExecutors appExecutors;
 
     @Inject
+    CountingIdlingResource idlingResource;
+
+    @Inject
     RecipeRepository(@NonNull Context applicationContext, @NonNull BakingService bakingService, @NonNull LocalRecipesDataSource localRecipesDataSource, @NonNull AppExecutors appExecutors) {
         this.context = applicationContext;
         this.bakingService = bakingService;
@@ -48,6 +52,7 @@ public class RecipeRepository {
         if (!Utils.isNetworkConnected(context)) {
             callback.onComplete(null, ErrorState.NO_NETWORK);
         } else {
+            idlingResource.increment();
             call = bakingService.getRecipes();
             call.enqueue(new Callback<List<Recipe>>() {
                 @Override
@@ -61,12 +66,14 @@ public class RecipeRepository {
                     } else {
                         callback.onComplete(null, ErrorState.EMPTY);
                     }
+                    idlingResource.decrement();
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<List<Recipe>> call, @NonNull Throwable t) {
                     final String message = t.getMessage();
                     callback.onComplete(null, ErrorState.error((message == null) ? UNKNOWN_ERROR : message));
+                    idlingResource.decrement();
                 }
             });
         }
@@ -74,6 +81,7 @@ public class RecipeRepository {
     }
 
     public void getCachedRecipes(@NonNull DataCallback<List<Recipe>> callback) {
+        idlingResource.increment();
         appExecutors.diskIO().execute(() -> {
             final List<Recipe> recipes = localRecipesDataSource.getAllRecipes();
             // notify on the main thread
@@ -83,6 +91,23 @@ public class RecipeRepository {
                 } else {
                     callback.onComplete(null, ErrorState.FAILED);
                 }
+                idlingResource.decrement();
+            });
+        });
+    }
+
+    public void getRecipeById(long recipeId, @NonNull DataCallback<Recipe> callback) {
+        idlingResource.increment();
+        appExecutors.diskIO().execute(() -> {
+            final Recipe recipe = localRecipesDataSource.getRecipeById(recipeId);
+            // notify on the main thread
+            appExecutors.mainThread().execute(() -> {
+                if (recipe != null) {
+                    callback.onComplete(recipe, null);
+                } else {
+                    callback.onComplete(null, ErrorState.FAILED);
+                }
+                idlingResource.decrement();
             });
         });
     }

@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.support.annotation.VisibleForTesting;
 
 import com.projects.melih.baking.common.SingleLiveEvent;
 import com.projects.melih.baking.model.Recipe;
@@ -21,8 +22,10 @@ import retrofit2.Call;
  */
 public class RecipesViewModel extends ViewModel {
     private final SingleLiveEvent<ErrorState> errorLiveData;
+    @VisibleForTesting
     private final MutableLiveData<Boolean> loadingLiveData;
     private final MutableLiveData<Boolean> triggerListData;
+    @VisibleForTesting
     private final MediatorLiveData<List<Recipe>> recipesLiveData;
     private final RecipeRepository recipeRepository;
     private Call<List<Recipe>> callRecipes;
@@ -70,10 +73,12 @@ public class RecipesViewModel extends ViewModel {
         return errorLiveData;
     }
 
+    @VisibleForTesting
     public LiveData<Boolean> getLoadingLiveData() {
         return loadingLiveData;
     }
 
+    @VisibleForTesting
     public LiveData<List<Recipe>> getRecipesLiveData() {
         return recipesLiveData;
     }

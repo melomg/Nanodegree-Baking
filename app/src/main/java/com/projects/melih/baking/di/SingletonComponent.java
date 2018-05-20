@@ -1,5 +1,8 @@
 package com.projects.melih.baking.di;
 
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.idling.CountingIdlingResource;
+
 import com.projects.melih.baking.BakingApplication;
 import com.projects.melih.baking.repository.ApiAndDataModule;
 
@@ -24,4 +27,7 @@ public interface SingletonComponent extends AndroidInjector<BakingApplication> {
     @Component.Builder
     abstract class Builder extends AndroidInjector.Builder<BakingApplication> {
     }
+
+    @VisibleForTesting
+    CountingIdlingResource idlingResource();
 }
