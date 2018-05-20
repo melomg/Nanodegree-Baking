@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import com.projects.melih.baking.ui.main.RecipesViewModel;
+import com.projects.melih.baking.ui.recipe.RecipeViewModel;
 
 import dagger.Binds;
 import dagger.Module;
@@ -18,6 +19,11 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(RecipesViewModel.class)
     abstract ViewModel bindRecipesViewModel(RecipesViewModel recipesViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RecipeViewModel.class)
+    abstract ViewModel bindRecipeViewModel(RecipeViewModel recipeViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(BakingViewModelFactory viewModelFactory);

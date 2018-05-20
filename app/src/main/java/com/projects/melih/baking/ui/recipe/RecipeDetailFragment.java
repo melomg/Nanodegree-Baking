@@ -1,5 +1,6 @@
 package com.projects.melih.baking.ui.recipe;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -30,12 +31,16 @@ import com.projects.melih.baking.ui.step.StepDetailFragment;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 /**
  * Created by Melih Gültekin on 06.05.2018
  * <p>
  * Master Fragment
  */
 public class RecipeDetailFragment extends BaseFragment {
+    @Inject
+    public ViewModelProvider.Factory viewModelFactory;
     private FragmentRecipeDetailBinding binding;
     private RecipeViewModel recipeViewModel;
     private StepListAdapter adapter;
@@ -44,7 +49,7 @@ public class RecipeDetailFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_recipe_detail, container, false);
-        recipeViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(RecipeViewModel.class);
+        recipeViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(RecipeViewModel.class);
 
         recipeViewModel.getSelectedRecipeLiveData().observe(this, this::updateUI);
         return binding.getRoot();
