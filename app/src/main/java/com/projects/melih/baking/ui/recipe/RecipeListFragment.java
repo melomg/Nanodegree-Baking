@@ -1,5 +1,6 @@
 package com.projects.melih.baking.ui.recipe;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
@@ -25,7 +26,7 @@ import javax.inject.Inject;
  */
 public class RecipeListFragment extends BaseFragment {
     @Inject
-    ViewModelProvider.Factory viewModelFactory;
+    public ViewModelProvider.Factory viewModelFactory;
     private FragmentRecipeListBinding binding;
     private RecipesViewModel recipesViewModel;
     private RecipeListAdapter adapter;
@@ -34,6 +35,7 @@ public class RecipeListFragment extends BaseFragment {
         return new RecipeListFragment();
     }
 
+    @SuppressLint("VisibleForTests")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
