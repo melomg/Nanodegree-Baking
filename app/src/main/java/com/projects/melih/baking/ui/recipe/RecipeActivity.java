@@ -16,12 +16,19 @@ import com.projects.melih.baking.ui.base.BaseActivity;
  */
 public class RecipeActivity extends BaseActivity {
     private static final String KEY_RECIPE = "key_recipe";
+    private static final String KEY_RECIPE_ID = "key_recipe_id";
     private RecipeViewModel viewModel;
     private Recipe recipe;
 
     public static Intent newIntent(@NonNull Context context, @NonNull Recipe recipe) {
         Intent intent = new Intent(context, RecipeActivity.class);
         intent.putExtra(RecipeActivity.KEY_RECIPE, recipe);
+        return intent;
+    }
+
+    public static Intent newIntent(@NonNull Context context, long recipeId) {
+        Intent intent = new Intent(context, RecipeActivity.class);
+        intent.putExtra(RecipeActivity.KEY_RECIPE_ID, recipeId);
         return intent;
     }
 

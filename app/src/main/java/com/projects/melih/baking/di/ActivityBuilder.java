@@ -4,6 +4,7 @@ import com.projects.melih.baking.ui.main.MainActivity;
 import com.projects.melih.baking.ui.main.MainActivityFragmentBuildersModule;
 import com.projects.melih.baking.ui.recipe.RecipeActivity;
 import com.projects.melih.baking.ui.recipe.RecipeActivityFragmentBuildersModule;
+import com.projects.melih.baking.widget.RecipeAppWidgetConfigure;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -21,4 +22,8 @@ public abstract class ActivityBuilder {
     @ScopeActivity
     @ContributesAndroidInjector(modules = {RecipeActivityFragmentBuildersModule.class})
     abstract RecipeActivity bindRecipeActivity();
+
+    @ScopeActivity
+    @ContributesAndroidInjector
+    abstract RecipeAppWidgetConfigure bindRecipeAppWidgetConfigure();
 }

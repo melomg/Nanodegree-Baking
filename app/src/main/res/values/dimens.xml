@@ -9,4 +9,6 @@
     <dimen name="list_item_width">300dp</dimen>
     <dimen name="sp_16">16sp</dimen>
     <item name="first_pane_ratio" format="float" type="dimen">0.4</item>
+
+    <dimen name="widget_margin">8dp</dimen>
 </resources>

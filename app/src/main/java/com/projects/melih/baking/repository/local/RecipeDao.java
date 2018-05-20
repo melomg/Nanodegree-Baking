@@ -1,6 +1,5 @@
 package com.projects.melih.baking.repository.local;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -18,6 +17,9 @@ public interface RecipeDao {
 
     @Query("SELECT * from Recipes")
     List<Recipe> getAll();
+
+    @Query("SELECT * from Recipes where id = :id LIMIT 1")
+    Recipe getRecipe(long id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Recipe recipe);

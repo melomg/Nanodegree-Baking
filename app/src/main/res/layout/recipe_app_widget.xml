@@ -1,0 +1,28 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/widget_margin"
+                android:background="@color/white">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/appwidget_ingredients_header"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ingredients_header_u"
+        android:textColor="@color/gray"
+        android:layout_margin="@dimen/large_size"/>
+
+    <TextView
+        android:id="@+id/appwidget_ingredients_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textIsSelectable="true"
+        android:layout_marginStart="@dimen/large_size"
+        android:layout_below="@+id/appwidget_ingredients_header"
+        android:contentDescription="@string/appwidget_text"
+        tools:text=" \u2219\ 2 CUP Graham Cracker crumbs"/>
+</RelativeLayout>
