@@ -23,6 +23,8 @@ import android.support.test.runner.AndroidJUnitRunner;
 import com.projects.melih.baking.TestApp;
 
 /**
+ * taken from https://github.com/googlesamples/android-architecture-components/blob/master/GithubBrowserSample/app/src/androidTest/java/com/android/example/github/util/GithubTestRunner.kt
+ * <p>
  * Custom runner to disable dependency injection.
  */
 public class BakingTestRunner extends AndroidJUnitRunner {

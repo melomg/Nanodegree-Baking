@@ -21,10 +21,15 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 /**
+ * taken from https://github.com/googlesamples/android-architecture-components/blob/master/GithubBrowserSample/app/src/androidTest/java/com/android/example/github/util/ViewModelUtil.kt
+ * <p>
  * Creates a one off view model factory for the given view model instance.
  */
 public class ViewModelUtil {
-    private ViewModelUtil() {}
+    private ViewModelUtil() {
+        //no-op
+    }
+
     public static <T extends ViewModel> ViewModelProvider.Factory createFor(T model) {
         return new ViewModelProvider.Factory() {
             @NonNull

@@ -32,6 +32,8 @@ import android.widget.ProgressBar;
 import org.hamcrest.Matcher;
 
 /**
+ * taken from https://github.com/googlesamples/android-architecture-components/blob/master/GithubBrowserSample/app/src/androidTest/java/com/android/example/github/util/EspressoTestUtil.kt
+ * <p>
  * Utility methods for espresso tests.
  */
 public class EspressoTestUtil {
