@@ -3,6 +3,7 @@ package com.projects.melih.baking.ui.step;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,8 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.util.Util;
 import com.projects.melih.baking.R;
 import com.projects.melih.baking.common.CollectionUtils;
 import com.projects.melih.baking.common.Utils;
@@ -34,12 +37,17 @@ import javax.inject.Inject;
  * Detail Fragment(Second Pane) of RecipeDetailFragment
  */
 public class StepDetailFragment extends BaseFragment implements View.OnClickListener {
+    private static final String EXTRA_VIDEO_POSITION = "extra_video_position";
+    private static final String EXTRA_IS_VIDEO_PLAYING = "extra_is_video_playing";
+    private static final long INITIAL_POSITION = 0;
     @Inject
     public ViewModelProvider.Factory viewModelFactory;
     private FragmentStepDetailBinding binding;
     private RecipeViewModel recipeViewModel;
     private StepPagerAdapter adapter;
     private VideoPlayerObserver videoPlayerObserver;
+    private long videoPosition;
+    private boolean isVideoPlaying = true;
 
     public static StepDetailFragment newInstance() {
         return new StepDetailFragment();
@@ -104,7 +112,24 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
             }
         }
 
+        if (savedInstanceState != null) {
+            videoPosition = savedInstanceState.getLong(EXTRA_VIDEO_POSITION, INITIAL_POSITION);
+            isVideoPlaying = savedInstanceState.getBoolean(EXTRA_IS_VIDEO_PLAYING, true);
+        }
+
         videoPlayerObserver.setPlayerView(context, binding.playerView);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (videoPlayerObserver != null) {
+            ExoPlayer exoPlayer = videoPlayerObserver.getExoPlayer();
+            if (exoPlayer != null) {
+                outState.putLong(EXTRA_VIDEO_POSITION, exoPlayer.getCurrentPosition());
+                outState.putBoolean(EXTRA_IS_VIDEO_PLAYING, exoPlayer.getPlayWhenReady());
+            }
+        }
     }
 
     @Override
@@ -112,9 +137,13 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
         Utils.await(v);
         switch (v.getId()) {
             case R.id.previous:
+                isVideoPlaying = true;
+                videoPosition = INITIAL_POSITION;
                 recipeViewModel.goToPreviousStep();
                 break;
             case R.id.next:
+                isVideoPlaying = true;
+                videoPosition = INITIAL_POSITION;
                 recipeViewModel.goToNextStep();
                 break;
         }
@@ -140,14 +169,14 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
                         .load(thumbnailUrl)
                         .thumbnail(0.1f)
                         .into(binding.stepImage);
-                videoPlayerObserver.stopMediaPlayer();
+                saveVideoData();
 
                 binding.stepImage.setVisibility(View.VISIBLE);
                 binding.playerView.setVisibility(View.GONE);
             } else {
                 binding.stepImage.setVisibility(View.GONE);
                 binding.playerView.setVisibility(View.VISIBLE);
-                videoPlayerObserver.setSelectedVideoIndex(position);
+                videoPlayerObserver.setSelectedVideoIndex(position, videoPosition, isVideoPlaying);
             }
         }
 
@@ -164,6 +193,31 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
 
         if (!context.getResources().getBoolean(R.bool.is_phone_and_land)) {
             binding.viewPager.setCurrentItem(position);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= Build.VERSION_CODES.M) {
+            saveVideoData();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > Build.VERSION_CODES.M) {
+            saveVideoData();
+        }
+    }
+
+    private void saveVideoData() {
+        ExoPlayer exoPlayer = videoPlayerObserver.getExoPlayer();
+        if (exoPlayer != null) {
+            videoPosition = exoPlayer.getCurrentPosition();
+            isVideoPlaying = exoPlayer.getPlayWhenReady();
+            exoPlayer.setPlayWhenReady(false);
         }
     }
 }

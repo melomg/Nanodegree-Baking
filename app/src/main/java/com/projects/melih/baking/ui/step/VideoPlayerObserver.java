@@ -13,7 +13,6 @@ import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
-import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.PlaybackParameters;
@@ -67,14 +66,14 @@ public class VideoPlayerObserver implements LifecycleObserver, Player.EventListe
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     protected void onPause() {
         if (Util.SDK_INT <= Build.VERSION_CODES.M) {
-            stopMediaPlayer();
+            releaseMediaPlayer();
         }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     protected void onStop() {
         if (Util.SDK_INT > Build.VERSION_CODES.M) {
-            stopMediaPlayer();
+            releaseMediaPlayer();
         }
     }
 
@@ -83,10 +82,18 @@ public class VideoPlayerObserver implements LifecycleObserver, Player.EventListe
      */
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     protected void onDestroy() {
-        releasePlayer();
+        if (exoPlayer != null) {
+            exoPlayer.stop();
+            exoPlayer.release();
+            exoPlayer = null;
+        }
         if (mediaSession != null) {
             mediaSession.setActive(false);
         }
+    }
+
+    public SimpleExoPlayer getExoPlayer() {
+        return exoPlayer;
     }
 
     public void setPlayerView(@NonNull Context context, @NonNull PlayerView playerView) {
@@ -99,18 +106,12 @@ public class VideoPlayerObserver implements LifecycleObserver, Player.EventListe
         this.uris = uris;
     }
 
-    public void setSelectedVideoIndex(int indexOfSelectedVideo) {
+    public void setSelectedVideoIndex(int indexOfSelectedVideo, long videoPosition, boolean isVideoPlaying) {
         if (exoPlayer == null) {
             initializeExoPlayer();
         }
-        exoPlayer.setPlayWhenReady(true);
-        exoPlayer.seekTo(indexOfSelectedVideo, C.TIME_UNSET);
-    }
-
-    public void stopMediaPlayer() {
-        if (exoPlayer != null) {
-            exoPlayer.setPlayWhenReady(false);
-        }
+        exoPlayer.seekTo(indexOfSelectedVideo, videoPosition);
+        exoPlayer.setPlayWhenReady(isVideoPlaying);
     }
 
     // ExoPlayer Event Listeners
@@ -149,7 +150,6 @@ public class VideoPlayerObserver implements LifecycleObserver, Player.EventListe
             stateBuilder.setState(PlaybackStateCompat.STATE_PAUSED, currentPosition, playbackSpeed);
         }
         mediaSession.setPlaybackState(stateBuilder.build());
-        //TODO showNotification(stateBuilder.build());
     }
 
     @Override
@@ -182,15 +182,9 @@ public class VideoPlayerObserver implements LifecycleObserver, Player.EventListe
         //no-op
     }
 
-    /**
-     * Release ExoPlayer.
-     */
-    private void releasePlayer() {
-        //TODO notificationManager.cancelAll();
+    private void releaseMediaPlayer() {
         if (exoPlayer != null) {
-            exoPlayer.stop();
             exoPlayer.release();
-            exoPlayer = null;
         }
     }
 
