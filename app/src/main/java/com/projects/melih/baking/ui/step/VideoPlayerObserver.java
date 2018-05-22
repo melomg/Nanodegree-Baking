@@ -52,14 +52,14 @@ public class VideoPlayerObserver implements LifecycleObserver, Player.EventListe
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     protected void onStart() {
         if ((Util.SDK_INT > Build.VERSION_CODES.M) && (exoPlayer != null)) {
-            exoPlayer.setPlayWhenReady(true);
+            initializeExoPlayer();
         }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     protected void onResume() {
         if ((Util.SDK_INT <= Build.VERSION_CODES.M) && (exoPlayer != null)) {
-            exoPlayer.setPlayWhenReady(true);
+            initializeExoPlayer();
         }
     }
 
@@ -123,7 +123,7 @@ public class VideoPlayerObserver implements LifecycleObserver, Player.EventListe
     @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
         if (exoPlayer.getCurrentWindowIndex() != 0) {
-            exoPlayer.setPlayWhenReady(false);
+            exoPlayer.setPlayWhenReady(true);
         }
     }
 

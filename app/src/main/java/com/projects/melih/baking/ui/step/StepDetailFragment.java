@@ -133,6 +133,22 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= Build.VERSION_CODES.M) {
+            saveVideoData();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > Build.VERSION_CODES.M) {
+            saveVideoData();
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         Utils.await(v);
         switch (v.getId()) {
@@ -193,22 +209,6 @@ public class StepDetailFragment extends BaseFragment implements View.OnClickList
 
         if (!context.getResources().getBoolean(R.bool.is_phone_and_land)) {
             binding.viewPager.setCurrentItem(position);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (Util.SDK_INT <= Build.VERSION_CODES.M) {
-            saveVideoData();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (Util.SDK_INT > Build.VERSION_CODES.M) {
-            saveVideoData();
         }
     }
 
