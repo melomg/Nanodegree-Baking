@@ -5,10 +5,10 @@ import java.util.Collection;
 /**
  * Created by Melih Gültekin on 22.04.2018
  */
-public class CollectionUtils {
+public final class CollectionUtils {
 
     private CollectionUtils() {
-        //no-op
+        throw new AssertionError("No instances for you!");
     }
 
     public static boolean isNotEmpty(Collection<?> list) {

@@ -12,11 +12,11 @@ import java.text.DecimalFormatSymbols;
  * Created by Melih Gültekin on 22.04.2018
  */
 
-public class Utils {
+public final class Utils {
     private static DecimalFormat numberFormatter;
 
     private Utils() {
-        // no-op
+        throw new AssertionError("No instances for you!");
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
